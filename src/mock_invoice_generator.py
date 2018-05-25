@@ -61,3 +61,11 @@ def mock_invoice_generator(invoiceno_pool_file, stockcode_pool_file, customerid_
     stockcode_pool_f.close()
     customerid_pool_f.close()
     output_f.close()
+
+
+if __name__ == "__main__":
+    invoiceno_pool_file = open("config/invoiceno_pool.txt", "r+")
+    stockcode_pool_file = open("config/stockcode_pool.txt", "r+")
+    customerid_pool_file = open("config/customerid_pool.txt", "r+")
+    output_file = open("data/out/invoice_"+datetime.datetime.utcnow().strftime("%Y-%m-%d")+".csv", "a+")
+    mock_invoice_generator(invoiceno_pool_file.strpath, stockcode_pool_file.strpath, customerid_pool_file.strpath, output_file.strpath, -1)
