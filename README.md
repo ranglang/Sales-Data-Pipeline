@@ -25,6 +25,10 @@ Log files
 PID
 `cat /tmp/supervisord.pid`
 
+### Docker
+Start docker daemon
+`sudo service docker start`
+
 ### Airflow
 Access the dags inside ~/airflow/dags
 `export AIRFLOW_HOME=~/airflow`
