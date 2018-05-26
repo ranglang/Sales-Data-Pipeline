@@ -43,6 +43,7 @@ class MockProducer(object):
         try:
             loop.run_until_complete(
                 asyncio.wait([
+                    self.send_invoice(),
                     self.send_customer(),
                     self.send_product()
                 ])
@@ -63,7 +64,7 @@ class MockProducer(object):
                 customerid = random.choice(list(self.customerid_pool.keys()))
                 message = ",".join([invoiceno, stockcode, quantity, invoicedate, customerid])
                 self.producer.send('invoice_in', str.encode(message))
-                yield from asyncio.sleep(1)
+            yield from asyncio.sleep(1)
 
     # customerid,country
     @coroutine
