@@ -26,7 +26,7 @@ if __name__ == "__main__":
             customerid, country = msg.value.split(',')
             logging.debug('%s %s', customerid, country)
             sql = "INSERT INTO `customer` (`CUSTOMER_ID`, `COUNTRY`) VALUES (%s, %s)"
-            cursor.execute(sql, customerid, country)
+            cursor.execute(sql, (customerid, country))
             connection.commit()
 
     connection.close()
