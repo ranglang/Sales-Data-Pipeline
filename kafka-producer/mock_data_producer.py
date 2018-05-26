@@ -81,7 +81,7 @@ class MockProducer(object):
                 # Construct and send the message
                 message = ",".join([customerid, country])
                 self.producer.send('customer_in', str.encode(message))
-                yield from asyncio.sleep(0.1)
+                yield from asyncio.sleep(1)
 
     # stockcode,description,unitprice
     @coroutine
@@ -99,7 +99,7 @@ class MockProducer(object):
                 # COnstruct and send the message
                 message = ",".join([stockcode, description, unitprice])
                 self.producer.send('product_in', str.encode(message))
-                yield from asyncio.sleep(0.1)
+                yield from asyncio.sleep(1)
 
 
 if __name__ == "__main__":
