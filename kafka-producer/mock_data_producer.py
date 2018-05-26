@@ -15,8 +15,8 @@ class MockProducer(object):
 
     def run(self):
         loop = asyncio.get_event_loop()
-    	loop.run_until_complete( asyncio.wait([self.send_invoice()]) )
-    	loop.close()
+        loop.run_until_complete( asyncio.wait([self.send_invoice()]) )
+        loop.close()
 
     @coroutine
     def send_invoice(self):
