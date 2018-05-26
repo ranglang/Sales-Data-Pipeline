@@ -69,37 +69,35 @@ class MockProducer(object):
     # customerid,country
     @coroutine
     def send_customer(self):
-        while True:
-            if len(self.customerid_ini):
-                # Select from customerid_ini
-                customerid = random.choice(list(self.customerid_ini.keys()))
-                country = self.customerid_ini[customerid]
-                # Remove from customerid_ini
-                del self.customerid_ini[customerid]
-                # Insert into customerid_pool
-                self.customerid_pool[customerid] = [country]
-                # Construct and send the message
-                message = ",".join([customerid, country])
-                self.producer.send('customer_in', str.encode(message))
-                yield from asyncio.sleep(1)
+        while len(self.customerid_ini):
+            # Select from customerid_ini
+            customerid = random.choice(list(self.customerid_ini.keys()))
+            country = self.customerid_ini[customerid]
+            # Remove from customerid_ini
+            del self.customerid_ini[customerid]
+            # Insert into customerid_pool
+            self.customerid_pool[customerid] = [country]
+            # Construct and send the message
+            message = ",".join([customerid, country])
+            self.producer.send('customer_in', str.encode(message))
+            yield from asyncio.sleep(1)
 
     # stockcode,description,unitprice
     @coroutine
     def send_product(self):
-        while True:
-            if len(self.stockcode_ini):
-                # Select from stockcode_ini
-                stockcode = random.choice(list(self.stockcode_ini.keys()))
-                description = self.stockcode_ini[stockcode][0]
-                unitprice = str(self.stockcode_ini[stockcode][1])
-                # Remove from stockcode_ini
-                del self.stockcode_ini[stockcode]
-                # Insert into stock_pool
-                self.stock_pool[stockcode] = [description, unitprice]
-                # COnstruct and send the message
-                message = ",".join([stockcode, description, unitprice])
-                self.producer.send('product_in', str.encode(message))
-                yield from asyncio.sleep(1)
+        while len(self.stockcode_ini):
+            # Select from stockcode_ini
+            stockcode = random.choice(list(self.stockcode_ini.keys()))
+            description = self.stockcode_ini[stockcode][0]
+            unitprice = str(self.stockcode_ini[stockcode][1])
+            # Remove from stockcode_ini
+            del self.stockcode_ini[stockcode]
+            # Insert into stock_pool
+            self.stock_pool[stockcode] = [description, unitprice]
+            # Construct and send the message
+            message = ",".join([stockcode, description, unitprice])
+            self.producer.send('product_in', str.encode(message))
+            yield from asyncio.sleep(1)
 
 
 if __name__ == "__main__":
