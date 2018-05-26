@@ -43,8 +43,6 @@ class MockProducer(object):
         try:
             loop.run_until_complete(
                 asyncio.wait([
-                    self.send_invoice(),
-                    self.send_customer(),
                     self.send_product()
                 ])
             )
