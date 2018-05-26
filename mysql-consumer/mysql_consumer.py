@@ -1,5 +1,6 @@
 import pymysql
 from kafka import KafkaConsumer
+import logging
 
 #
 # class Product():
@@ -9,6 +10,7 @@ if __name__ == "__main__":
     # customer_consumer = KafkaConsumer('customer_in', bootstrap_servers='kafka1:9092')
     # for msg in customer_consumer:
     #     print(msg)
+    logging.basicConfig(filename='example.log',level=logging.DEBUG)
 
     customer_consumer = KafkaConsumer(bootstrap_servers='kafka1:9092', \
                                       value_deserializer=lambda m: m.decode('utf-8'))
@@ -22,10 +24,9 @@ if __name__ == "__main__":
     with connection.cursor() as cursor:
         for msg in customer_consumer:
             customerid, country = msg.value.split(',')
-            print(customerid)
-            print(country)
-            sql = "INSERT INTO `customer` (`CUSTOMER_ID`, `COUNTRY`) VALUES (%s, %s)" % (customerid, country)
-            cursor.execute(sql)
+            logging.debug('%s %s', customerid, country)
+            sql = "INSERT INTO `customer` (`CUSTOMER_ID`, `COUNTRY`) VALUES (%s, %s)"
+            cursor.execute(sql, customerid, country)
             connection.commit()
 
     connection.close()
