@@ -11,7 +11,7 @@ if __name__ == "__main__":
     #     print(msg)
 
     customer_consumer = KafkaConsumer(bootstrap_servers='kafka1:9092', \
-                                      value_deserializer=lambda m: json.loads(m.decode('utf-8')))
+                                      value_deserializer=lambda m: m.decode('utf-8'))
     customer_consumer.subscribe(['customer_in'])
 
     connection = pymysql.connect(host='mysql',
