@@ -64,6 +64,8 @@ class MockProducer(object):
                 customerid = random.choice(list(self.customerid_pool.keys()))
                 message = ",".join([invoiceno, stockcode, quantity, invoicedate, customerid])
                 self.producer.send('invoice_in', str.encode(message))
+            else:
+                self.producer.send('invoice_in', str.encode(str(len(self.stockcode_pool)) + '\t' + str(len(self.customerid_pool))))
             yield from asyncio.sleep(1)
 
     # customerid,country
