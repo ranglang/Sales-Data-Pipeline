@@ -43,6 +43,7 @@ class MockProducer(object):
         try:
             loop.run_until_complete(
                 asyncio.wait([
+                    self.send_customer(),
                     self.send_product()
                 ])
             )
@@ -83,15 +84,6 @@ class MockProducer(object):
     # stockcode,description,unitprice
     @coroutine
     def send_product(self):
-        # for stockcode in self.stockcode_ini.keys():
-        #     description = self.stockcode_ini[stockcode][0]
-        #     unitprice = str(self.stockcode_ini[stockcode][1])
-        #     del self.stockcode_ini[stockcode]
-        #     self.stockcode_pool[stockcode] = [description, unitprice]
-        #     message = ",".join([stockcode, description, unitprice])
-        #     self.producer.send('product_in', str.encode(message))
-        #     yield from asyncio.sleep(1)
-
         while len(self.stockcode_ini):
             # Select from stockcode_ini
             stockcode = random.choice(list(self.stockcode_ini.keys()))
