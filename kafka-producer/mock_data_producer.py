@@ -15,19 +15,22 @@ class MockProducer(object):
 
     def run(self):
         loop = asyncio.get_event_loop()
-        loop.run_until_complete(asyncio.wait([self.send_invoice()]))
-        loop.close()
+        try:
+            loop.run_until_complete(asyncio.wait([self.send_invoice()]))
+        finally:
+            loop.close()
 
     @coroutine
     def send_invoice(self):
-        invoiceno = random.choice(self.invoiceno_pool)
-        stockcode = random.choice(self.stockcode_pool)
-        quantity = str(random.randint(1, 100))
-        invoicedate = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
-        customerid = random.choice(self.customerid_pool)
-        message = ",".join([invoiceno, stockcode, quantity, invoicedate, customerid])
-        self.producer.send('invoice_in', b'some_message_bytes')
-        yield from asyncio.sleep(1)
+        while True:
+            invoiceno = random.choice(self.invoiceno_pool)
+            stockcode = random.choice(self.stockcode_pool)
+            quantity = str(random.randint(1, 100))
+            invoicedate = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+            customerid = random.choice(self.customerid_pool)
+            message = ",".join([invoiceno, stockcode, quantity, invoicedate, customerid])
+            self.producer.send('invoice_in', b'some_message_bytes')
+            yield from asyncio.sleep(1)
 
     @coroutine
     def send_customer(self):
