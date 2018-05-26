@@ -87,7 +87,7 @@ class MockProducer(object):
             description = self.stockcode_ini[stockcode][0]
             unitprice = str(self.stockcode_ini[stockcode][1])
             del self.stockcode_ini[stockcode]
-            self.stock_pool[stockcode] = [description, unitprice]
+            self.stockcode_pool[stockcode] = [description, unitprice]
             message = ",".join([stockcode, description, unitprice])
             self.producer.send('product_in', str.encode(message))
             yield from asyncio.sleep(1)
@@ -100,7 +100,7 @@ class MockProducer(object):
         #     # Remove from stockcode_ini
         #     del self.stockcode_ini[stockcode]
         #     # Insert into stock_pool
-        #     self.stock_pool[stockcode] = [description, unitprice]
+        #     self.stockcode_pool[stockcode] = [description, unitprice]
         #     # Construct and send the message
         #     message = ",".join([stockcode, description, unitprice])
         #     self.producer.send('product_in', str.encode(message))
