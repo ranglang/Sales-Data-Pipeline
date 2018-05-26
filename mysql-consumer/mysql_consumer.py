@@ -22,6 +22,8 @@ if __name__ == "__main__":
     with connection.cursor() as cursor:
         for msg in customer_consumer:
             customerid, country = msg.value.split(',')
+            print(customerid)
+            print(country)
             sql = "INSERT INTO `customer` (`CUSTOMER_ID`, `COUNTRY`) VALUES (%s, %s)" % (customerid, country)
             cursor.execute(sql)
             connection.commit()
