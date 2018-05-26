@@ -29,7 +29,7 @@ class MockProducer(object):
             invoicedate = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
             customerid = random.choice(self.customerid_pool)
             message = ",".join([invoiceno, stockcode, quantity, invoicedate, customerid])
-            self.producer.send('invoice_in', b'some_message_bytes')
+            self.producer.send('invoice_in', str.encode(message))
             yield from asyncio.sleep(1)
 
     @coroutine
