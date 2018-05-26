@@ -33,6 +33,14 @@ services:
     container_name: pipeline-kafka-producer
 
 
+  mysql-consumer:
+    build: ./mysql-consumer
+    depends_on:
+      - kafka1
+      - mysql
+    container_name: pipeline-mysql-consumer
+
+
   mysql:
     image: mysql:5.6.34
     restart: always
