@@ -26,11 +26,11 @@ services:
     container_name: pipeline-kafka
 
 
-  kafka-producer:
-    build: ./kafka-producer
+  mock-producer:
+    build: ./mock-producer
     depends_on:
       - kafka1
-    container_name: pipeline-kafka-producer
+    container_name: pipeline-mock-producer
 
 
   mysql-consumer:
@@ -54,3 +54,8 @@ services:
     ports:
       - "3306:3306"
     container_name: pipeline-mysql
+
+
+  airflow:
+    build: ./airflow
+    container_name: pipeline-airflow
