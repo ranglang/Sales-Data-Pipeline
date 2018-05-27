@@ -31,3 +31,26 @@ services:
     depends_on:
       - kafka1
     container_name: pipeline-kafka-producer
+
+
+  mysql-consumer:
+    build: ./mysql-consumer
+    depends_on:
+      - kafka1
+      - mysql
+    container_name: pipeline-mysql-consumer
+
+
+  mysql:
+    image: mysql:5.6.34
+    restart: always
+    environment:
+      MYSQL_DATABASE: "sales_data_pipeline"
+      MYSQL_ROOT_PASSWORD: "233"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+    command: --init-file /tmp/create_db.sql
+    volumes:
+      - ./mysql/create_db.sql:/tmp/create_db.sql
+    ports:
+      - "3306:3306"
+    container_name: pipeline-mysql
