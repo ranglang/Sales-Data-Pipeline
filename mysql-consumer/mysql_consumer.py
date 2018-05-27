@@ -3,6 +3,38 @@ from kafka import KafkaConsumer
 import threading
 import time
 
+
+class invoiceConsumer(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.stop_event = threading.Event()
+
+    def stop(self):
+        self.stop_event.set()
+
+    def run(self):
+        invoice_consumer = KafkaConsumer(bootstrap_servers='kafka1:9092', \
+                                          value_deserializer=lambda m: m.decode('utf-8'))
+        invoice_consumer.subscribe(['invoice_in'])
+
+        connection = pymysql.connect(host='mysql',
+                                     user='root',
+                                     password='233',
+                                     db='sales_data_pipeline')
+        while not self.stop_event.is_set():
+
+            with connection.cursor() as cursor:
+                for msg in invoice_consumer:
+                    invoiceno, stockcode, quantity, invoicedate, customerid = msg.value.split(',')
+                    sql = "INSERT INTO `invoice` (`INVOICE_NO`, `STOCK_CODE`, `QUANTITY`, `INVOICE_DATE`, `CUSTOMER_ID`) VALUES (%s, %s, %s, %s, %s)"
+                    cursor.execute(sql, (invoiceno, stockcode, quantity, invoicedate, customerid))
+                    connection.commit()
+                    if self.stop_event.is_set():
+                        break
+            connection.close()
+        invoice_consumer.close()
+
+
 class customerConsumer(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
@@ -67,6 +99,7 @@ class productConsumer(threading.Thread):
 
 def main():
     tasks = [
+        invoiceConsumer(),
         customerConsumer(),
         productConsumer()
     ]
