@@ -9,9 +9,8 @@ import os
 # Calculate the start date
 current_date = datetime.utcnow() - timedelta(days=5)
 # Set Spark path
-os.environ['SPARK_HOME'] = '/home/wenyixu/spark-2.3.0-bin-hadoop2.7/'
+sparkSubmit = os.getcwd() + '/bin/spark-submit'
 sys.path.append(os.path.join(os.environ['SPARK_HOME'], 'bin'))
-srcDir = os.getcwd() + '/../src/'
 
 default_args = {
                 'owner': 'airflow',
@@ -36,7 +35,7 @@ task_dummy = BashOperator(task_id='task_dummy',
                           dag=sale_data_pipeline)
 
 task_spark_test = BashOperator(task_id='spark_test',
-                               bash_command='spark-submit ' + srcDir + 'test.py',
+                               bash_command=sparkSubmit + ' ' + '--master spark://master:7077 ../src/test.py',
                                dag=sale_data_pipeline)
 
 # task_dummy = PythonOperator(task_id='get_customer_geo_dist',
