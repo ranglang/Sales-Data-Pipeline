@@ -119,6 +119,7 @@ services:
           - POSTGRES_DB=airflow
       container_name: pipeline-postgres
 
+
   airflow:
       image: puckel/docker-airflow:1.9.0-3
       restart: always
