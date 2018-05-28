@@ -131,7 +131,6 @@ services:
       volumes:
           - ./airflow/bin/:/usr/local/airflow/bin
           - ./airflow/dags:/usr/local/airflow/dags
-          - ./logs/airflow:/usr/local/airflow/logs
           # Uncomment to include custom plugins
           # - ./plugins:/usr/local/airflow/plugins
       ports:
