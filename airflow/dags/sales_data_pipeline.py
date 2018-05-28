@@ -2,7 +2,6 @@ from airflow import DAG
 from datetime import datetime, timedelta
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.python_operator import PythonOperator
-#from src.get_customer_geo_dist import get_customer_geo_dist
 
 import sys
 import os
@@ -10,7 +9,8 @@ import os
 # Calculate the start date
 current_date = datetime.utcnow() - timedelta(days=5)
 # Set Spark path
-sparkSubmit = '/home/wenyixu/spark-2.3.0-bin-hadoop2.7/bin/spark-submit'
+os.environ['SPARK_HOME'] = '/home/wenyixu/spark-2.3.0-bin-hadoop2.7/'
+sys.path.append(os.path.join(os.environ['SPARK_HOME'], 'bin'))
 srcDir = os.getcwd() + '/../src/'
 
 default_args = {
@@ -29,14 +29,14 @@ default_args = {
                 }
 
 # schedule_interval="@hourly"
-sale_data_pipeline = DAG('weebly-v0', schedule_interval=timedelta(minutes=5), catchup=False, default_args=default_args)
+sale_data_pipeline = DAG('sales-data-pipeline', schedule_interval=timedelta(minutes=5), catchup=False, default_args=default_args)
 
 task_dummy = BashOperator(task_id='task_dummy',
                           bash_command='touch os.path.dirname(__file__)/../../data/out/test.txt',
                           dag=sale_data_pipeline)
 
 task_spark_test = BashOperator(task_id='spark_test',
-                               bash_command=sparkSubmit + ' ' + srcDir + 'test.py',
+                               bash_command='spark-submit ' + srcDir + 'test.py',
                                dag=sale_data_pipeline)
 
 # task_dummy = PythonOperator(task_id='get_customer_geo_dist',
