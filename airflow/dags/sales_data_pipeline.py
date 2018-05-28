@@ -9,8 +9,7 @@ import os
 # Calculate the start date
 current_date = datetime.utcnow() - timedelta(days=5)
 # Set Spark path
-sparkSubmit = os.getcwd() + '/bin/spark-submit'
-sys.path.append(os.path.join(os.environ['SPARK_HOME'], 'bin'))
+sparkSubmit = os.getcwd() + '/../bin/spark-submit'
 
 default_args = {
                 'owner': 'airflow',
