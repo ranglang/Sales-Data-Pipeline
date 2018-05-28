@@ -9,7 +9,7 @@ import os
 # Calculate the start date
 current_date = datetime.utcnow() - timedelta(days=5)
 # Set Spark path
-sparkSubmit = os.getcwd() + '/../bin/spark-submit'
+sparkSubmit = os.getcwd() + '/bin/spark-submit'
 
 default_args = {
                 'owner': 'airflow',
@@ -29,9 +29,9 @@ default_args = {
 # schedule_interval="@hourly"
 sale_data_pipeline = DAG('sales-data-pipeline', schedule_interval=timedelta(minutes=5), catchup=False, default_args=default_args)
 
-task_dummy = BashOperator(task_id='task_dummy',
-                          bash_command='touch os.path.dirname(__file__)/../../data/out/test.txt',
-                          dag=sale_data_pipeline)
+# task_dummy = BashOperator(task_id='task_dummy',
+#                           bash_command='touch os.path.dirname(__file__)/../data/out/test.txt',
+#                           dag=sale_data_pipeline)
 
 task_spark_test = BashOperator(task_id='spark_test',
                                bash_command=sparkSubmit + ' ' + '--master spark://master:7077 ../src/test.py',
