@@ -117,6 +117,7 @@ services:
           - POSTGRES_USER=airflow
           - POSTGRES_PASSWORD=airflow
           - POSTGRES_DB=airflow
+      container_name: pipeline-postgres
 
   webserver:
       image: puckel/docker-airflow:1.9.0-3
@@ -133,6 +134,7 @@ services:
       ports:
           - "8080:8080"
       command: webserver
+      container_name: pipeline-airflow-webserver
       # healthcheck:
       #     test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
       #     interval: 30s
