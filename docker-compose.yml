@@ -129,6 +129,7 @@ services:
           - LOAD_EX=n
           - EXECUTOR=Local
       volumes:
+          - ./airflow/bin/:/usr/local/airflow/bin
           - ./airflow/dags:/usr/local/airflow/dags
           - ./logs/airflow:/usr/local/airflow/logs
           # Uncomment to include custom plugins
