@@ -27,18 +27,23 @@ default_args = {
                 }
 
 # schedule_interval="@hourly"
-sale_data_pipeline = DAG('sales-data-pipeline', schedule_interval=timedelta(minutes=5), catchup=False, default_args=default_args)
+sales_data_pipeline = DAG('sales-data-pipeline', schedule_interval=timedelta(minutes=5), catchup=False, default_args=default_args)
 
-# task_dummy = BashOperator(task_id='task_dummy',
-#                           bash_command='touch os.path.dirname(__file__)/../data/out/test.txt',
-#                           dag=sale_data_pipeline)
+
+script_path = os.path.join(os.path.dirname(__file__), '../src/setup_java.sh')
+setup_java = """
+. {{params.script_path}}
+"""
+
+task_setup_java = BashOperator(task_id='task_dummy',
+                               bash_command=setup_java,
+                               params={'script_path': script_path},
+                               dag=sales_data_pipeline)
 
 task_spark_test = BashOperator(task_id='spark_test',
                                bash_command=sparkSubmit + ' ' + '--master spark://master:7077 ../src/test.py',
-                               dag=sale_data_pipeline)
+                               dag=sales_data_pipeline)
 
-# task_dummy = PythonOperator(task_id='get_customer_geo_dist',
-#                             python_callable=get_customer_geo_dist,
-#                             op_args=[customer_file, customer_geo_dist_file],
-#                             provide_context=False,
-#                             dag=sale_data_pipeline)
+
+# Set dependencies
+task_spark_test.set_upstream(task_setup_java)
