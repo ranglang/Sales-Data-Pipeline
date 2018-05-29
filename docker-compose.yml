@@ -121,7 +121,7 @@ services:
 
 
   airflow:
-      build: ./airflow
+      build: puckel/docker-airflow:1.9.0-3
       restart: always
       depends_on:
           - postgres
