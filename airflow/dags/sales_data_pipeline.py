@@ -35,7 +35,7 @@ setup_java = """
 . {{params.script_path}}
 """
 
-task_setup_java = BashOperator(task_id='task_dummy',
+task_setup_java = BashOperator(task_id='setup_java',
                                bash_command=setup_java,
                                params={'script_path': script_path},
                                dag=sales_data_pipeline)
