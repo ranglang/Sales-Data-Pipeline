@@ -42,8 +42,8 @@ task_setup_env = BashOperator(task_id='setup_env',
 
 
 task_get_hourly_income = BashOperator(task_id='get_hourly_income',
-                                     bash_command=sparkSubmit + ' ' + '--master spark://master:7077' + \
-                                                                      '--jars ~/jars/mysql-connector-java-8.0.11.jar' + \
+                                     bash_command=sparkSubmit + ' ' + '--master spark://master:7077 ' + \
+                                                                      '--jars ~/jars/mysql-connector-java-8.0.11.jar ' + \
                                                                       '~/src/get_hourly_income.py',
                                      dag=sales_data_pipeline)
 
