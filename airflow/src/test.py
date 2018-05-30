@@ -1,7 +1,7 @@
 from pyspark import SparkConf, SparkContext
 
 def f0(x):
-    with open("test.txt", "a+") as f:
+    with open("~/test.txt", "a+") as f:
         f.write(str(x))
 
 conf = (SparkConf()
