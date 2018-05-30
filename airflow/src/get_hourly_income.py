@@ -1,5 +1,5 @@
 from pyspark import SparkConf, SparkContext
-from pyspark.sql import SQLContext
+from pyspark.sql import SparkSession
 import pymysql
 import os
 import time
@@ -19,7 +19,10 @@ def main():
              .setAppName("My app"))
     sc = SparkContext(conf = conf)
 
-    sqlContext = SQLContext(sc)
+    spark = SparkSession.builder \
+                        .appName("Python Spark SQL basic example") \
+                        .config("spark.some.config.option", "some-value") \
+                        .getOrCreate()
 
     hostname='mysql'
     jdbcPort=3306
@@ -35,6 +38,7 @@ def main():
     }
 
     query = "select * from invoice"
+
     df = spark.read.jdbc(url=jdbc_url, dbtable=query, properties=connectionProperties)
     df.show()
 
