@@ -3,7 +3,7 @@ FROM puckel/docker-airflow:1.9.0
 
 # install Java
 USER root
-RUN apt-get update \
+RUN apt-get update && \
     apt-get install default-jre -y && \
     apt-get install default-jdk -y
 
