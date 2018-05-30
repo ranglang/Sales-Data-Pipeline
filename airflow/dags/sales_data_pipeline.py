@@ -49,5 +49,5 @@ task_get_hourly_income = BashOperator(task_id='get_hourly_income',
                                      dag=sales_data_pipeline)
 
 # Set dependencies
-task_spark_test.set_upstream(task_setup_java)
+task_spark_test.set_upstream(task_setup_env)
 task_get_hourly_income.set_upstream(task_spark_test)
