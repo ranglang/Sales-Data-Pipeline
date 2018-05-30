@@ -39,7 +39,7 @@ def main():
 
     query = "select * from invoice"
 
-    df = spark.read.jdbc(url=jdbc_url, dbtable=query, properties=connectionProperties)
+    df = spark.read.jdbc(jdbc_url, query, connectionProperties)
     df.show()
 
     #last_hour = (datetime.datetime.utcnow() - timedelta(hours=1)).strftime("%Y-%m-%d %H")
