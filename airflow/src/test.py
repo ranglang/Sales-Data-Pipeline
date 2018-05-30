@@ -10,7 +10,7 @@ def processRecord(record):
                                  db='sales_data_pipeline')
 
     with connection.cursor() as cursor:
-        sql = "INSERT INTO `test` (`CUSTOMER_ID`, `NAME`) VALUES (%s, %s)"
+        sql = "INSERT INTO `test` (`CUSTOMER_ID`, `NAME`) VALUES ('101', 'Wenyi Xu')"
         cursor.execute(sql, record)
         connection.commit()
     connection.close()
