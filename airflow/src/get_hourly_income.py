@@ -13,6 +13,11 @@ import datetime
 
 
 def main():
+    conf = (SparkConf()
+             .setMaster("local")
+             .setAppName("My app"))
+    sc = SparkContext(conf = conf)
+    
     #last_hour = (datetime.datetime.utcnow() - timedelta(hours=1)).strftime("%Y-%m-%d %H")
     connection = pymysql.connect(host='mysql',
                                  user='root',
