@@ -129,7 +129,7 @@ services:
           - LOAD_EX=n
           - EXECUTOR=Local
       volumes:
-          - ./airflow/bin/:/usr/local/airflow/bin
+          - ./airflow/spark-2.3.0-bin-hadoop2.7/:/usr/local/airflow/spark-2.3.0-bin-hadoop2.7
           - ./airflow/dags:/usr/local/airflow/dags
           - ./airflow/src:/usr/local/airflow/src
           # Uncomment to include custom plugins
