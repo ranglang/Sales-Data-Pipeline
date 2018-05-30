@@ -17,7 +17,7 @@ def main():
              .setMaster("local")
              .setAppName("My app"))
     sc = SparkContext(conf = conf)
-    
+
     #last_hour = (datetime.datetime.utcnow() - timedelta(hours=1)).strftime("%Y-%m-%d %H")
     connection = pymysql.connect(host='mysql',
                                  user='root',
@@ -29,7 +29,7 @@ def main():
         invioce_rdd = sc.parallelize(cursor.fetchall())
     connection.close()
 
-    invioce_hour_rdd = invioce_rdd.map(lambda x: (x[:4], 'Miao'))
+    invioce_hour_rdd = invioce_rdd.filter(lambda x: x[0] != '1111')
     invioce_hour_rdd.foreach(send_to_db)
 
 
