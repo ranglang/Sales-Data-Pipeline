@@ -30,15 +30,15 @@ default_args = {
 sales_data_pipeline = DAG('sales-data-pipeline', schedule_interval=timedelta(minutes=5), catchup=False, default_args=default_args)
 
 
-script_path = os.path.join(os.path.dirname(__file__), '../src/setup_java.sh')
-setup_java = """
-. {{params.script_path}}
-"""
-
-task_setup_java = BashOperator(task_id='setup_java',
-                               bash_command=setup_java,
-                               params={'script_path': script_path},
-                               dag=sales_data_pipeline)
+# script_path = os.path.join(os.path.dirname(__file__), '../src/setup_java.sh')
+# setup_java = """
+# . {{params.script_path}}
+# """
+#
+# task_setup_java = BashOperator(task_id='setup_java',
+#                                bash_command=setup_java,
+#                                params={'script_path': script_path},
+#                                dag=sales_data_pipeline)
 
 task_spark_test = BashOperator(task_id='spark_test',
                                bash_command=sparkSubmit + ' ' + '--master spark://master:7077 ../src/test.py',
