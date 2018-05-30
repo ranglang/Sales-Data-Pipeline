@@ -50,4 +50,4 @@ task_get_hourly_income = BashOperator(task_id='get_hourly_income',
 
 # Set dependencies
 task_spark_test.set_upstream(task_setup_java)
-task_get_daily_income.set_upstream(task_spark_test)
+task_get_hourly_income.set_upstream(task_spark_test)
