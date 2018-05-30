@@ -13,7 +13,7 @@ import datetime
 
 
 def main():
-    last_hour = (datetime.datetime.utcnow() - timedelta(hours=1)).strftime("%Y-%m-%d %H")
+    #last_hour = (datetime.datetime.utcnow() - timedelta(hours=1)).strftime("%Y-%m-%d %H")
     connection = pymysql.connect(host='mysql',
                                  user='root',
                                  password='233',
