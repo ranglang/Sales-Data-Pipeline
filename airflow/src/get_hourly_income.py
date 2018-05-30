@@ -6,6 +6,8 @@ import datetime
 
 # utc time
 
+# `INVOICE_NO`, `STOCK_CODE`, `QUANTITY`, `INVOICE_DATE`, `CUSTOMER_ID`
+
 # def get_hourly_income():
 
 
@@ -22,7 +24,7 @@ def main():
         invioce_rdd = sc.parallelize(cursor.fetchall())
     connection.close()
 
-    invioce_hour_rdd = invioce_rdd.map(lambda x: x[3] = 'Miao')
+    invioce_hour_rdd = invioce_rdd.map(lambda x: (x[:4], 'Miao'))
     invioce_hour_rdd.foreach(send_to_db)
 
 
