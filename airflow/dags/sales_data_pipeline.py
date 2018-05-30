@@ -44,6 +44,10 @@ task_spark_test = BashOperator(task_id='spark_test',
                                bash_command=sparkSubmit + ' ' + '--master spark://master:7077 ~/src/test.py',
                                dag=sales_data_pipeline)
 
+task_get_hourly_income = BashOperator(task_id='get_hourly_income',
+                                     bash_command=sparkSubmit + ' ' + '--master spark://master:7077 ~/src/get_hourly_income.py',
+                                     dag=sales_data_pipeline)
 
 # Set dependencies
-# task_spark_test.set_upstream(task_setup_java)
+task_spark_test.set_upstream(task_setup_java)
+task_get_daily_income.set_upstream(task_spark_test)
