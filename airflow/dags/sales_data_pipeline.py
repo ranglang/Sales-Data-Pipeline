@@ -30,7 +30,7 @@ default_args = {
 sales_data_pipeline = DAG('sales-data-pipeline', schedule_interval=timedelta(minutes=5), catchup=False, default_args=default_args)
 
 
-script_path = '~/src/setup_env.sh')
+script_path = '~/src/setup_env.sh'
 setup_env = """
 . {{params.script_path}}
 """
