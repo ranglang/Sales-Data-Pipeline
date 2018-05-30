@@ -12,5 +12,6 @@ RUN apt-get install unzip -y && \
     apt-get autoremove -y
 
 RUN pip install pyspark
+RUN pip install PyMySQL
 
 USER airflow
