@@ -11,7 +11,7 @@ def processRecord(record):
 
     with connection.cursor() as cursor:
         sql = "INSERT INTO `test` (`CUSTOMER_ID`, `NAME`) VALUES (%s, %s)"
-        cursor.execute(sql, ('101', 'Wenyi Xu'))
+        cursor.execute(sql, record)
         connection.commit()
     connection.close()
 
