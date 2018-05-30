@@ -10,8 +10,8 @@ def processRecord(record):
                                  db='sales_data_pipeline')
 
     with connection.cursor() as cursor:
-        sql = "INSERT INTO `test` (`CUSTOMER_ID`, `NAME`) VALUES ('101', 'Wenyi Xu')"
-        cursor.execute(sql)
+        sql = "INSERT INTO `test` (`CUSTOMER_ID`, `NAME`) VALUES (%s, %s)"
+        cursor.execute(sql, ('101', 'Wenyi Xu'))
         connection.commit()
     connection.close()
 
@@ -22,7 +22,7 @@ conf = (SparkConf()
          .setAppName("My app"))
 sc = SparkContext(conf = conf)
 
-data =['103', 'tester_1']
+data =[('101', 'Wenyi Xu')]
 
 rdd = sc.parallelize(data)
 
