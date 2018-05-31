@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 # `INVOICE_NO`, `STOCK_CODE`, `QUANTITY`, `INVOICE_DATE`, `CUSTOMER_ID`
 
 def get_invoice_cnt(last_time, current_time, invoice_df):
-    last_time_invoice_cnt = invoice_df.filter((df["INVOICE_DATE"] >  last_time) & (df["INVOICE_DATE"] < current_time)) \
+    last_time_invoice_cnt = invoice_df.filter((invoice_df["INVOICE_DATE"] >  last_time) & (invoice_df["INVOICE_DATE"] < current_time)) \
                                       .select("INVOICE_NO") \
                                       .distinct() \
                                       .count()
@@ -18,7 +18,7 @@ def get_invoice_cnt(last_time, current_time, invoice_df):
 
 
 def get_product_cnt(last_time, current_time, invoice_df):
-    last_time_product_cnt = invoice_df.filter((df["INVOICE_DATE"] >  last_time) & (df["INVOICE_DATE"] < current_time)) \
+    last_time_product_cnt = invoice_df.filter((invoice_df["INVOICE_DATE"] >  last_time) & (invoice_df["INVOICE_DATE"] < current_time)) \
                                       .select("QUANTITY") \
                                       .sum()
     return last_time_product_cnt
