@@ -1,5 +1,5 @@
 from pyspark import SparkConf, SparkContext
-from pyspark.sql import SparkSession
+from pyspark.sql import SparkSession, Row
 import pymysql
 import os
 import time
@@ -9,15 +9,13 @@ from datetime import datetime, timedelta
 # %Y-%m-%d %H:%M:%S
 # `INVOICE_NO`, `STOCK_CODE`, `QUANTITY`, `INVOICE_DATE`, `CUSTOMER_ID`
 
-def get_minute_sales(df):
-    last_minute = (datetime.utcnow() - timedelta(minutes=1)).strftime("%Y-%m-%d %H:%M:%S")
-    current_time = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
-    df_last_minute = df.filter((df["INVOICE_DATE"] >  last_minute) & (df["INVOICE_DATE"] < current_time)) \
-                       .select("INVOICE_NO") \
-                       .distinct() \
-                       .count()
-    df_last_minute.show()
-    return df_last_minute
+def get_minute_sales(last_minute, current_time, df):
+    last_minute_invoice_cnt = df.filter((df["INVOICE_DATE"] >  last_minute) & (df["INVOICE_DATE"] < current_time)) \
+                                .select("INVOICE_NO") \
+                                .distinct() \
+                                .count()
+    # df_last_minute.show()
+    return last_minute_invoice_cnt
 
 
 
@@ -32,6 +30,9 @@ def main():
                         .appName("Python Spark SQL basic example") \
                         .config("spark.some.config.option", "some-value") \
                         .getOrCreate()
+
+    last_minute = (datetime.utcnow() - timedelta(minutes=1)).strftime("%Y-%m-%d %H:%M:%S")
+    current_time = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
     hostname='mysql'
     jdbcPort=3306
@@ -50,9 +51,12 @@ def main():
     # query = "select * from invoice"
     df = spark.read.jdbc(url=jdbc_url, table="invoice", properties=connectionProperties)
     # df.show()
-    df_last_minute = get_minute_sales(df)
+    last_minute_invoice_cnt = get_minute_sales(last_minute, current_time, df)
+    last_minute_invoice_cnt_row = Row('STAT_DATE', 'INVOICE_CNT')
+    last_minute_invoice_cnt_df = spark.createDataFrame([last_minute_invoice_cnt_row(last_minute, last_minute_invoice_cnt)])
+    last_minute_invoice_cnt_df.show()
 
-    df_last_minute.write.jdbc(url=jdbc_url, table="minute_sales", properties=properties)
+    last_minute_invoice_cnt_df.write.jdbc(url=jdbc_url, table="minute_sales", properties=properties)
 
 
 
