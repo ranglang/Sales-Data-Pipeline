@@ -23,7 +23,7 @@ def get_product_cnt(last_time, current_time, invoice_df):
                                       .groupBy() \
                                       .sum('QUANTITY')
 
-    get_product_cnt.show()
+    last_time_product_cnt.show()
     return last_time_product_cnt
 
 
