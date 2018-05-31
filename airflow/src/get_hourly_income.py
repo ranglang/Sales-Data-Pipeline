@@ -3,17 +3,16 @@ from pyspark.sql import SparkSession
 import pymysql
 import os
 import time
-import datetime
+from datetime import datetime, timedelta
 
 # utc time
 # %Y-%m-%d %H:%M:%S
 # `INVOICE_NO`, `STOCK_CODE`, `QUANTITY`, `INVOICE_DATE`, `CUSTOMER_ID`
 
 def get_hourly_income(df):
-    current_time = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M")
-    df_last_hour = df.select(":".join(df['INVOICE_DATE'].split(":")[0:2])) \
-                     .alias("INVOICE_MINUTE") \
-                     .filter(df["INVOICE_MINUTE"] == current_time)
+    last_minute = (datetime.utcnow() - timedelta(minutes=1)).strftime("%Y-%m-%d %H:%M:%S")
+    current_time = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    df_last_hour = df.filter(df["INVOICE_MINUTE"] >  last_minute & df["INVOICE_MINUTE"] < current_time)
     df_last_hour.show()
 
 
