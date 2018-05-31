@@ -14,14 +14,14 @@ import datetime
 
 
 def main():
-    os.environ['SPARK_CLASSPATH'] = "~/jars/mysql-connector-java-8.0.11.jar"
+    # os.environ['SPARK_CLASSPATH'] = "~/jars/mysql-connector-java-8.0.11.jar"
 
     conf = (SparkConf()
              .setMaster("local")
              .setAppName("My app"))
 
-    conf.set("spark.executor.extraClassPath", "~/jars/mysql-connector-java-8.0.11.jar")
-    conf.set("spark.driver.extraClassPath", "~/jars/mysql-connector-java-8.0.11.jar")
+    # conf.set("spark.executor.extraClassPath", "~/jars/mysql-connector-java-8.0.11.jar")
+    # conf.set("spark.driver.extraClassPath", "~/jars/mysql-connector-java-8.0.11.jar")
 
     sc = SparkContext(conf = conf)
 
@@ -40,7 +40,8 @@ def main():
 
     connectionProperties = {
       "user" : username,
-      "password" : password
+      "password" : password,
+      "driver": 'com.mysql.jdbc.Driver'
     }
 
     # query = "select * from invoice"
