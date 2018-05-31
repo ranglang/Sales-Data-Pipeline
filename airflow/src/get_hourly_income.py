@@ -38,9 +38,9 @@ def main():
     }
 
     # query = "select * from invoice"
-    dbtable = "sales_data_pipeline.invoice"
+    table = "invoice"
 
-    df = spark.read.jdbc(jdbc_url, dbtable, driver="com.mysql.jdbc.Driver", properties=connectionProperties)
+    df = spark.read.jdbc(url=jdbc_url, table=table, properties=connectionProperties)
     df.show()
 
     #last_hour = (datetime.datetime.utcnow() - timedelta(hours=1)).strftime("%Y-%m-%d %H")
