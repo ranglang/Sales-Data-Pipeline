@@ -14,6 +14,8 @@ import datetime
 
 
 def main():
+    os.environ['SPARK_CLASSPATH'] = "~/jars/mysql-connector-java-8.0.11.jar"
+
     conf = (SparkConf()
              .setMaster("local")
              .setAppName("My app"))
