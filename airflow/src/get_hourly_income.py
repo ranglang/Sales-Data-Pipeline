@@ -9,19 +9,16 @@ import datetime
 
 # `INVOICE_NO`, `STOCK_CODE`, `QUANTITY`, `INVOICE_DATE`, `CUSTOMER_ID`
 
-# def get_hourly_income():
-
+def get_hourly_income(df):
+    current_time = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M")
+    df_last_hour = df.filter(":".join(df['INVOICE_DATE'].split(":")[0:2]) == current_time)
+    df_last_hour.show()
 
 
 def main():
-    # os.environ['SPARK_CLASSPATH'] = "~/jars/mysql-connector-java-8.0.11.jar"
-
     conf = (SparkConf()
              .setMaster("local")
              .setAppName("My app"))
-
-    # conf.set("spark.executor.extraClassPath", "~/jars/mysql-connector-java-8.0.11.jar")
-    # conf.set("spark.driver.extraClassPath", "~/jars/mysql-connector-java-8.0.11.jar")
 
     sc = SparkContext(conf = conf)
 
@@ -48,34 +45,9 @@ def main():
     table = "invoice"
 
     df = spark.read.jdbc(url=jdbc_url, table=table, properties=connectionProperties)
-    df.show()
+    # df.show()
+    get_hourly_income(df)
 
-    #last_hour = (datetime.datetime.utcnow() - timedelta(hours=1)).strftime("%Y-%m-%d %H")
-#     connection = pymysql.connect(host='mysql',
-#                                  user='root',
-#                                  password='233',
-#                                  db='sales_data_pipeline')
-#
-#     with connection.cursor() as cursor:
-#         cursor.execute("select * from invoice")
-#         invioce_rdd = sc.parallelize(cursor.fetchall())
-#     connection.close()
-#
-#     invioce_hour_rdd = invioce_rdd.map(lambda x: )
-#     invioce_hour_rdd.foreach(send_to_db)
-#
-#
-# def send_to_db(record):
-#     connection = pymysql.connect(host='mysql',
-#                                  user='root',
-#                                  password='233',
-#                                  db='sales_data_pipeline')
-#
-#     with connection.cursor() as cursor:
-#         sql = "INSERT INTO `daily_income_test` (`INVOICE_NO`, `STOCK_CODE`, `QUANTITY`, `INVOICE_DATE`, `CUSTOMER_ID`) VALUES (%s, %s, %s, %s, %s)"
-#         cursor.execute(sql, record)
-#         connection.commit()
-#     connection.close()
 
 
 if __name__ == "__main__":
