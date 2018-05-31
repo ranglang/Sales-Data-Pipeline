@@ -9,14 +9,19 @@ from datetime import datetime, timedelta
 # %Y-%m-%d %H:%M:%S
 # `INVOICE_NO`, `STOCK_CODE`, `QUANTITY`, `INVOICE_DATE`, `CUSTOMER_ID`
 
-def get_minute_sales(last_minute, current_time, df):
-    last_minute_invoice_cnt = df.filter((df["INVOICE_DATE"] >  last_minute) & (df["INVOICE_DATE"] < current_time)) \
-                                .select("INVOICE_NO") \
-                                .distinct() \
-                                .count()
-    # df_last_minute.show()
-    return last_minute_invoice_cnt
+def get_invoice_cnt(last_time, current_time, invoice_df):
+    last_time_invoice_cnt = invoice_df.filter((df["INVOICE_DATE"] >  last_time) & (df["INVOICE_DATE"] < current_time)) \
+                                      .select("INVOICE_NO") \
+                                      .distinct() \
+                                      .count()
+    return last_time_invoice_cnt
 
+
+def get_product_cnt(last_time, current_time, invoice_df):
+    last_time_product_cnt = invoice_df.filter((df["INVOICE_DATE"] >  last_time) & (df["INVOICE_DATE"] < current_time)) \
+                                      .select("QUANTITY") \
+                                      .sum()
+    return last_time_product_cnt
 
 
 def main():
@@ -31,9 +36,11 @@ def main():
                         .config("spark.some.config.option", "some-value") \
                         .getOrCreate()
 
-    last_minute = (datetime.utcnow() - timedelta(minutes=1)).strftime("%Y-%m-%d %H:%M:%S")
+    # Get time range
+    last_time = (datetime.utcnow() - timedelta(minutes=1)).strftime("%Y-%m-%d %H:%M:%S")
     current_time = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
+    # Set JDBC
     hostname='mysql'
     jdbcPort=3306
     dbname='sales_data_pipeline'
@@ -48,15 +55,34 @@ def main():
       "driver": 'com.mysql.jdbc.Driver'
     }
 
-    # query = "select * from invoice"
-    df = spark.read.jdbc(url=jdbc_url, table="invoice", properties=connectionProperties)
-    # df.show()
-    last_minute_invoice_cnt = get_minute_sales(last_minute, current_time, df)
-    last_minute_invoice_cnt_row = Row('STAT_DATE', 'INVOICE_CNT')
-    last_minute_invoice_cnt_df = spark.createDataFrame([last_minute_invoice_cnt_row(last_minute, last_minute_invoice_cnt)])
-    last_minute_invoice_cnt_df.show()
+    # Read from MySQL
+    invoice_df = spark.read.jdbc(url=jdbc_url, table="invoice", properties=connectionProperties)
+    product_df = spark.read.jdbc(url=jdbc_url, table="product", properties=connectionProperties)
 
-    last_minute_invoice_cnt_df.write.jdbc(url=jdbc_url, table="minute_sales", properties=properties)
+    # For debug
+    invoice_df.show()
+    product_df.show()
+
+    # -------------------------------------------------------------------------------------------------------------------------
+    # 1) Get invoice sales count during last time interval
+    last_time_invoice_cnt = get_invoice_cnt(last_time, current_time, invoice_df)
+    # last_time_invoice_cnt_row = Row('STAT_DATE', 'INVOICE_CNT')
+    # last_time_invoice_cnt_df = spark.createDataFrame([last_time_invoice_cnt_row(last_time, last_time_invoice_cnt)])
+    # last_time_invoice_cnt_df.show()
+
+    # last_time_invoice_cnt_df.write.jdbc(url=jdbc_url, table="minute_sales", properties=connectionProperties)
+
+    # -------------------------------------------------------------------------------------------------------------------------
+    # 2) Get product sales count during last time interval
+    last_time_product_cnt = get_product_cnt(last_time, current_time, invoice_df)
+
+
+    # -------------------------------------------------------------------------------------------------------------------------
+    # 3) Write all messages during last time interval
+    row = Row('STATS_TIME', 'INVOICE_CNT', 'PRODUCT_CNT')
+    sales_stats_df = spark.createDataFrame([row(last_time, last_time_invoice_cnt, last_time_product_cnt)])
+    sales_stats_df.show()
+    sales_stats_df.write.jdbc(url=jdbc_url, table="sales_stats", properties=connectionProperties)
 
 
 
