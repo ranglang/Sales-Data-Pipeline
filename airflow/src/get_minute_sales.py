@@ -19,8 +19,8 @@ def get_invoice_cnt(last_time, current_time, invoice_df):
 
 def get_product_cnt(last_time, current_time, invoice_df):
     last_time_product_cnt = invoice_df.filter((invoice_df["INVOICE_DATE"] >  last_time) & (invoice_df["INVOICE_DATE"] < current_time)) \
-                                      .select("QUANTITY") \
-                                      .sum()
+                                      .groupBy() \
+                                      .sum('QUANTITY')
     return last_time_product_cnt
 
 
