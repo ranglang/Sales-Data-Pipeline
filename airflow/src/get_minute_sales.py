@@ -22,10 +22,10 @@ def get_product_cnt(last_time, current_time, invoice_df):
     last_time_product_cnt = invoice_df.filter((invoice_df["INVOICE_DATE"] >  last_time) & (invoice_df["INVOICE_DATE"] < current_time)) \
                                       .groupBy() \
                                       .sum('QUANTITY') \
-                                      .collect()[0]
+                                      .collect()[0][0]
 
     # last_time_product_cnt.show()
-    return int(last_time_product_cnt)
+    return last_time_product_cnt
 
 
 def main():
