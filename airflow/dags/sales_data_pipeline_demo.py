@@ -27,7 +27,7 @@ default_args = {
                 }
 
 # schedule_interval="@hourly"
-sales_data_pipeline = DAG('sales-data-pipeline', schedule_interval=timedelta(minutes=1), catchup=False, default_args=default_args)
+sales_data_pipeline = DAG('sales-data-pipeline-demo', schedule_interval=timedelta(minutes=1), catchup=False, default_args=default_args)
 
 
 script_path = '~/src/setup_env.sh'
@@ -41,10 +41,10 @@ task_setup_env = BashOperator(task_id='setup_env',
                                dag=sales_data_pipeline)
 
 
-task_get_hourly_income = BashOperator(task_id='get_hourly_income',
+task_get_minute_sales = BashOperator(task_id='get_minute_sales',
                                      bash_command=sparkSubmit + ' ' + '--master spark://master:7077 ' + \
                                                                       '--jars ~/jars/mysql-connector-java-8.0.11.jar ' + \
-                                                                      '~/src/get_hourly_income.py',
+                                                                      '~/src/get_minute_sales.py',
                                      dag=sales_data_pipeline)
 
 # Set dependencies

@@ -9,11 +9,16 @@ from datetime import datetime, timedelta
 # %Y-%m-%d %H:%M:%S
 # `INVOICE_NO`, `STOCK_CODE`, `QUANTITY`, `INVOICE_DATE`, `CUSTOMER_ID`
 
-def get_hourly_income(df):
+def get_minute_sales(df):
     last_minute = (datetime.utcnow() - timedelta(minutes=1)).strftime("%Y-%m-%d %H:%M:%S")
     current_time = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
-    df_last_hour = df.filter((df["INVOICE_DATE"] >  last_minute) & (df["INVOICE_DATE"] < current_time))
-    df_last_hour.show()
+    df_last_minute = df.filter((df["INVOICE_DATE"] >  last_minute) & (df["INVOICE_DATE"] < current_time)) \
+                       .select("INVOICE_NO") \
+                       .distinct() \
+                       .count()
+    df_last_minute.show()
+    return df_last_minute
+
 
 
 def main():
@@ -43,11 +48,11 @@ def main():
     }
 
     # query = "select * from invoice"
-    table = "invoice"
-
-    df = spark.read.jdbc(url=jdbc_url, table=table, properties=connectionProperties)
+    df = spark.read.jdbc(url=jdbc_url, table="invoice", properties=connectionProperties)
     # df.show()
-    get_hourly_income(df)
+    df_last_minute = get_minute_sales(df)
+
+    df_last_minute.write.jdbc(url=jdbc_url, table="minute_sales", properties=properties)
 
 
 
