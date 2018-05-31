@@ -19,6 +19,10 @@ def main():
     conf = (SparkConf()
              .setMaster("local")
              .setAppName("My app"))
+
+    conf.set("spark.executor.extraClassPath", "~/jars/mysql-connector-java-8.0.11.jar")
+    conf.set("spark.driver.extraClassPath", "~/jars/mysql-connector-java-8.0.11.jar")
+
     sc = SparkContext(conf = conf)
 
     spark = SparkSession.builder \
