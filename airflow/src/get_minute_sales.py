@@ -25,7 +25,7 @@ def get_product_cnt(last_time, current_time, invoice_df):
                                       .collect()[0]
 
     # last_time_product_cnt.show()
-    return last_time_product_cnt
+    return int(last_time_product_cnt)
 
 
 def main():
