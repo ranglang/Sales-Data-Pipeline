@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 def get_hourly_income(df):
     last_minute = (datetime.utcnow() - timedelta(minutes=1)).strftime("%Y-%m-%d %H:%M:%S")
     current_time = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
-    df_last_hour = df.filter((df["INVOICE_DATE"] >  last_minute) && (df["INVOICE_DATE"] < current_time))
+    df_last_hour = df.filter((df["INVOICE_DATE"] >  last_minute) & (df["INVOICE_DATE"] < current_time))
     df_last_hour.show()
 
 
