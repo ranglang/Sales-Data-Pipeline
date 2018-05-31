@@ -1,6 +1,6 @@
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession, Row
-from pyspark.sql.types import IntegerType
+from pyspark.sql.types import DoubleType
 import pymysql
 import os
 import time
@@ -60,7 +60,7 @@ def main():
     invoice_df = spark.read.jdbc(url=jdbc_url, table="invoice", properties=connectionProperties)
     product_df = spark.read.jdbc(url=jdbc_url, table="product", properties=connectionProperties)
 
-    invoice_df = invoice_df.withColumn("QUANTITY", invoice_df["QUANTITY"].cast(IntegerType()))
+    invoice_df = invoice_df.withColumn("QUANTITY", invoice_df["QUANTITY"].cast(DoubleType()))
 
     # For debug
     invoice_df.show()
