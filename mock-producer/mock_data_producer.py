@@ -59,7 +59,7 @@ class MockProducer(object):
             if len(self.stockcode_pool) and len(self.customerid_pool):
                 invoiceno = random.choice(self.invoiceno_pool)
                 stockcode = random.choice(list(self.stockcode_pool.keys()))
-                quantity = str(random.randint(1, 100))
+                quantity = str(random.randint(1, 10))
                 invoicedate = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
                 customerid = random.choice(list(self.customerid_pool.keys()))
                 message = ",".join([invoiceno, stockcode, quantity, invoicedate, customerid])
