@@ -21,9 +21,10 @@ def get_invoice_cnt(last_time, current_time, invoice_df):
 def get_product_cnt(last_time, current_time, invoice_df):
     last_time_product_cnt = invoice_df.filter((invoice_df["INVOICE_DATE"] >  last_time) & (invoice_df["INVOICE_DATE"] < current_time)) \
                                       .groupBy() \
-                                      .sum('QUANTITY')
+                                      .sum('QUANTITY') \
+                                      .collect()
 
-    last_time_product_cnt.show()
+    # last_time_product_cnt.show()
     return last_time_product_cnt
 
 
@@ -84,10 +85,10 @@ def main():
 
     # -------------------------------------------------------------------------------------------------------------------------
     # 3) Write all messages during last time interval
-    # row = Row('STATS_TIME', 'INVOICE_CNT', 'PRODUCT_CNT')
-    # sales_stats_df = spark.createDataFrame([row(last_time, last_time_invoice_cnt, last_time_product_cnt)])
-    # sales_stats_df.show()
-    # sales_stats_df.write.jdbc(url=jdbc_url, table="sales_stats", properties=connectionProperties)
+    row = Row('STATS_TIME', 'INVOICE_CNT', 'PRODUCT_CNT')
+    sales_stats_df = spark.createDataFrame([row(last_time, last_time_invoice_cnt, last_time_product_cnt)])
+    sales_stats_df.show()
+    sales_stats_df.write.jdbc(url=jdbc_url, table="sales_stats", properties=connectionProperties)
 
 
 
