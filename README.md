@@ -1,11 +1,10 @@
 # Sales-Data-Pipeline
-A data pipeline for sales data.
 
 ## Summary
-
+A data pipeline for sales data.
 
 ## Architecture
-
+![architecture image](https://github.com/xuwenyihust/Sales-Data-Pipeline/blob/master/resource/sales_data_pipeline.png "Sales Data Pipeline Architecture")
 
 ## How to use
 Run the start script:
